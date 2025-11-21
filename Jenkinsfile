@@ -12,6 +12,12 @@ pipeline {
     // Agent specifies where the pipeline will run
     agent any
     
+    // Configure Node.js tool (requires NodeJS Plugin to be installed)
+    // IMPORTANT: Set the name to match your Node.js tool name in Global Tool Configuration
+    tools {
+        nodejs 'NodeJS-18'  // Change this to your tool name from Global Tool Configuration
+    }
+    
     // Environment variables for the pipeline
     environment {
         NODE_VERSION = '18'
