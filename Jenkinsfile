@@ -10,14 +10,7 @@
 
 pipeline {
     // Agent specifies where the pipeline will run
-    // Using Docker agent with Node.js image to ensure npm is available
-    agent {
-        docker {
-            image 'agent any'
-            // Optional: Uncomment the line below to cache npm packages (requires proper permissions)
-            // args '-v /root/.npm:/root/.npm'
-        }
-    }
+    agent any
     
     // Environment variables for the pipeline
     environment {
