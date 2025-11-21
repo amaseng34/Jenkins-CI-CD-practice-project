@@ -13,7 +13,7 @@ pipeline {
     // Using Docker agent with Node.js image to ensure npm is available
     agent {
         docker {
-            image 'node:18-alpine'
+            image 'agent any'
             // Optional: Uncomment the line below to cache npm packages (requires proper permissions)
             // args '-v /root/.npm:/root/.npm'
         }
