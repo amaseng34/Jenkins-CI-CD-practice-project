@@ -156,6 +156,21 @@ The pipeline will:
 - ✅ Validate the build
 - ✅ Report success/failure status
 
+### Troubleshooting: `npm: not found` Error
+
+If you see `npm: not found` error in Jenkins pipeline, the current Jenkinsfile uses **Docker agent** with Node.js image. 
+
+**Requirements for Docker option:**
+- Docker must be installed on Jenkins server
+- Jenkins must have permission to run Docker containers
+
+**Alternative solution (without Docker):**
+1. Install **NodeJS Plugin** in Jenkins (Manage Jenkins → Manage Plugins)
+2. Configure Node.js in **Global Tool Configuration** (Manage Jenkins → Global Tool Configuration)
+3. Use the alternative Jenkinsfile: `Jenkinsfile.no-docker`
+
+**For detailed instructions**, see `JENKINS_SETUP.md` file.
+
 ## 📦 Dependencies
 
 ### Production Dependencies

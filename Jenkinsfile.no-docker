@@ -1,23 +1,19 @@
 /**
  * Jenkins CI/CD Pipeline for Node.js Test Project
  * 
- * This pipeline includes:
- * - Checkout: Gets the code from repository
- * - Install Dependencies: Installs npm packages
- * - Run Tests: Executes Jest test suite
- * - Build: Validates the project builds successfully
+ * АЛЬТЕРНАТИВНАЯ ВЕРСИЯ БЕЗ DOCKER
+ * Используйте этот файл, если Docker недоступен в Jenkins
+ * 
+ * ТРЕБОВАНИЯ:
+ * - Установлен NodeJS Plugin в Jenkins
+ * - Настроен Node.js в Global Tool Configuration (имя: NodeJS-18)
+ * 
+ * Инструкции по настройке см. в JENKINS_SETUP.md
  */
 
 pipeline {
     // Agent specifies where the pipeline will run
-    // Using Docker agent with Node.js image to ensure npm is available
-    agent {
-        docker {
-            image 'node:18-alpine'
-            // Optional: Uncomment the line below to cache npm packages (requires proper permissions)
-            // args '-v /root/.npm:/root/.npm'
-        }
-    }
+    agent any
     
     // Environment variables for the pipeline
     environment {
@@ -47,7 +43,26 @@ pipeline {
         }
         
         /**
-         * Stage 2: Install Dependencies
+         * Stage 2: Setup Node.js
+         * Устанавливает Node.js через Jenkins Tool
+         * ВАЖНО: Убедитесь, что NodeJS Plugin установлен и настроен в Jenkins!
+         */
+        stage('Setup Node.js') {
+            steps {
+                echo 'Setting up Node.js...'
+                // Используйте имя, которое вы указали в Global Tool Configuration
+                // Замените 'NodeJS-18' на ваше имя инструмента
+                script {
+                    env.PATH = "${tool name: 'NodeJS-18', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'}/bin:${env.PATH}"
+                }
+                sh 'node --version'
+                sh 'npm --version'
+                echo 'Node.js setup completed!'
+            }
+        }
+        
+        /**
+         * Stage 3: Install Dependencies
          * Installs all npm dependencies specified in package.json
          */
         stage('Install Dependencies') {
@@ -59,7 +74,7 @@ pipeline {
         }
         
         /**
-         * Stage 3: Run Tests
+         * Stage 4: Run Tests
          * Executes the Jest test suite and generates coverage report
          */
         stage('Run Tests') {
@@ -83,7 +98,7 @@ pipeline {
         }
         
         /**
-         * Stage 4: Build
+         * Stage 5: Build
          * Validates that the project builds and starts correctly
          */
         stage('Build') {
@@ -141,3 +156,4 @@ pipeline {
         }
     }
 }
+
