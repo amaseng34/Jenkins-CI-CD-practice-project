@@ -28,19 +28,20 @@ pipeline {
     stages {
         /**
          * Stage 1: Checkout
-         * Retrieves the source code from the repository
+         * Jenkins automatically checks out code from SCM configuration
+         * No explicit checkout needed when SCM is configured in Job settings
          */
         stage('Checkout') {
             steps {
-                echo 'Checking out code from repository...'
-                checkout scm
+                echo 'Code checkout is handled by Jenkins SCM configuration...'
                 script {
-                    def gitCommit = sh(
-                        script: 'git rev-parse --short HEAD',
-                        returnStdout: true
-                    ).trim()
-                    env.GIT_COMMIT_SHORT = gitCommit
-                    echo "Git commit: ${env.GIT_COMMIT_SHORT}"
+                    // Use Jenkins built-in variables instead of git commands
+                    if (env.GIT_COMMIT) {
+                        echo "Git commit: ${env.GIT_COMMIT}"
+                    }
+                    if (env.GIT_BRANCH) {
+                        echo "Git branch: ${env.GIT_BRANCH}"
+                    }
                 }
             }
         }
